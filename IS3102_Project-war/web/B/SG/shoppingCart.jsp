@@ -244,7 +244,7 @@
                                                             </td>
                                                             <td style="padding: 5px">
                                                                 <input type="text" class="input-text text" title="name"id="txtName"
-                                                                    pattern="([a-zA-Z])"  required>                                                            
+                                                                    pattern="([a-zA-Z]*)"  required>                                                            
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -262,7 +262,7 @@
                                                             </td>
                                                             <td style="padding: 5px">
                                                                 <input type="text" class="input-text text " title="securitycode" id="txtSecuritycode" 
-                                                                    pattern="(\\d{3})" required>
+                                                                    pattern="(\d{3,3})" required>
                                                             </td>
                                                         </tr>
 
@@ -286,7 +286,7 @@
                                                                     <option>December</option>
                                                                 </select>
                                                                 <input type="text" style="width: 60px" class="input-text text" title="year" id="year" 
-                                                                    pattern="([A-Za-z])" required>(eg: 2015)                                                        
+                                                                    pattern="(\d{3,3})" required>(eg: 2015)                                                        
                                                             </td>
                                                         </tr>
                                                         <tr>
