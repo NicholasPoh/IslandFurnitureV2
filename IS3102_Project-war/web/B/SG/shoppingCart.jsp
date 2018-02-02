@@ -70,10 +70,25 @@
                 $("#makePaymentForm").show("slow", function () {
                 });
             }
+            
             function makePayment() {
-                window.event.returnValue = true;
-                document.makePaymentForm.action = "../../ECommerce_PaymentServlet";
-                document.makePaymentForm.submit();
+                var cardName = document.getElementById("txtName").value;
+                var cardNo = document.getElementById("txtCardNo").value;
+                var securityCode = document.getElementById("txtSecuritycode").value;
+                var year = document.getElementById("year").value;
+                
+                var letter = /[a-zA-Z]/;
+                var digitRegex = /^\d{16}$/;
+                var digitRegex2 = /^\d{3}$/;
+                var digitRegex3 = /^\d{4}$/;
+
+                if (((cardName == null || cardName == "") || !cardName.match(letter)) || ((cardNo == null || cardNo == "") || !cardNo.match(digitRegex))|| ((securityCode == null || securityCode == "") || !securityCode.match(digitRegex2))|| ((year == null || year == "") || !year.match(digitRegex3))){
+                   
+                } else {
+                    window.event.returnValue = true;
+                    document.makePaymentForm.action = "../../ECommerce_PaymentServlet";
+                    document.makePaymentForm.submit();
+                }
             }
         </script>
 
@@ -125,77 +140,76 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        
+
                                                         <%ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
-                                                            try{
-                                                                if(shoppingCart != null && shoppingCart.size() > 0){
-                                                                    for (ShoppingCartLineItem item : shoppingCart){%>
-                                                                        <tr class="cart_table_item">
-                                                                            <td class="product-remove">
-                                                                                <input type="checkbox" name="delete" value="<%=item.getSKU()%>" />
-                                                                            </td>
-                                                                            <td class="product-thumbnail">
-                                                                                <a href="furnitureProductDetails.jsp">
-                                                                                    <img width="100" height="100" alt="" class="img-responsive" src="../../..<%=item.getImageURL()%>">
-                                                                                </a>
-                                                                            </td>
-                                                                            <td class="product-name">
-                                                                                <a class="productDetails" href="furnitureProductDetails.jsp?sku=<%=item.getSKU()%>"><%=item.getName()%></a>
-                                                                            </td>
-                                                                            <td class="product-price">
-                                                                                $<span class="amount" id="price<%=item.getSKU()%>">
-                                                                                    <%=String.format("%.2f", item.getPrice())%>
-                                                                                </span>
-                                                                            </td>
-                                                                            <td class="product-quantity">
-                                                                                <form enctype="multipart/form-data" method="post" class="cart">
-                                                                                    <div class="quantity">
-                                                                                        <input type="button" class="minus" value="-" onclick="minus('<%=item.getSKU()%>')">
-                                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="<%=item.getQuantity()%>" name="quantity" min="1" step="1" id="<%=item.getSKU()%>">
-                                                                                        <input type="button" class="plus" value="+" onclick="plus('<%=item.getSKU()%>', '<%=item.getName()%>', '<%=item.getPrice()%>', '<%=item.getImageURL()%>', '<%=item.getSKU()%>')">
-                                                                                    </div>
-                                                                                </form>
-                                                                            </td>
-                                                                            <td class="product-subtotal">
-                                                                                $<span class="amount" id="totalPrice<%=item.getSKU()%>">
-                                                                                    <%=String.format("%.2f", (item.getPrice() * item.getQuantity()))%>
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
+                                                            try {
+                                                                if (shoppingCart != null && shoppingCart.size() > 0) {
+                                                                    for (ShoppingCartLineItem item : shoppingCart) {%>
+                                                        <tr class="cart_table_item">
+                                                            <td class="product-remove">
+                                                                <input type="checkbox" name="delete" value="<%=item.getSKU()%>" />
+                                                            </td>
+                                                            <td class="product-thumbnail">
+                                                                <a href="furnitureProductDetails.jsp">
+                                                                    <img width="100" height="100" alt="" class="img-responsive" src="../../..<%=item.getImageURL()%>">
+                                                                </a>
+                                                            </td>
+                                                            <td class="product-name">
+                                                                <a class="productDetails" href="furnitureProductDetails.jsp?sku=<%=item.getSKU()%>"><%=item.getName()%></a>
+                                                            </td>
+                                                            <td class="product-price">
+                                                                $<span class="amount" id="price<%=item.getSKU()%>">
+                                                                    <%=String.format("%.2f", item.getPrice())%>
+                                                                </span>
+                                                            </td>
+                                                            <td class="product-quantity">
+                                                                <form enctype="multipart/form-data" method="post" class="cart">
+                                                                    <div class="quantity">
+                                                                        <input type="button" class="minus" value="-" onclick="minus('<%=item.getSKU()%>')">
+                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="<%=item.getQuantity()%>" name="quantity" min="1" step="1" id="<%=item.getSKU()%>">
+                                                                        <input type="button" class="plus" value="+" onclick="plus('<%=item.getSKU()%>', '<%=item.getName()%>', '<%=item.getPrice()%>', '<%=item.getImageURL()%>', '<%=item.getSKU()%>')">
+                                                                    </div>
+                                                                </form>
+                                                            </td>
+                                                            <td class="product-subtotal">
+                                                                $<span class="amount" id="totalPrice<%=item.getSKU()%>">
+                                                                    <%=String.format("%.2f", (item.getPrice() * item.getQuantity()))%>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
                                                         <%          }
-                                                                }
-                                                                else{
-                                                                    finalPrice= 0.0;%>
-                                                                <tr class="cart_table_item">
-                                                                            <td class="product-remove">
-                                                                            </td>
-                                                                            <td class="product-thumbnail">
-                                                                                <a href="furnitureProductDetails.jsp">
-                                                                                </a>
-                                                                            </td>
-                                                                            <td class="product-name">
-                                                                            </td>
-                                                                            <td class="product-price">
-                                                                                <span class="amount" id="price">
-                                                                                       $ --.--
-                                                                                </span>
-                                                                            </td>
-                                                                            <td class="product-quantity">
-                                                                                <form enctype="multipart/form-data" method="post" class="cart">
-                                                                                    <div class="quantity">
-                                                                                        <input type="button" disabled="true"class="minus" value="-" onclick="minus('>')">
-                                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="" name="quantity" min="1" step="1" id="">
-                                                                                        <input type="button" disabled="true"class="plus" value="+" onclick="plus('', '','', '','')">
-                                                                                    </div>
-                                                                                </form>
-                                                                            </td>
-                                                                            <td class="product-subtotal">
-                                                                                <span class="amount" id="totalPrice">
-                                                                                    $ --.--
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
-                                                        <%        }   
+                                                        } else {
+                                                            finalPrice = 0.0;%>
+                                                        <tr class="cart_table_item">
+                                                            <td class="product-remove">
+                                                            </td>
+                                                            <td class="product-thumbnail">
+                                                                <a href="furnitureProductDetails.jsp">
+                                                                </a>
+                                                            </td>
+                                                            <td class="product-name">
+                                                            </td>
+                                                            <td class="product-price">
+                                                                <span class="amount" id="price">
+                                                                    $ --.--
+                                                                </span>
+                                                            </td>
+                                                            <td class="product-quantity">
+                                                                <form enctype="multipart/form-data" method="post" class="cart">
+                                                                    <div class="quantity">
+                                                                        <input type="button" disabled="true"class="minus" value="-" onclick="minus('>')">
+                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="" name="quantity" min="1" step="1" id="">
+                                                                        <input type="button" disabled="true"class="plus" value="+" onclick="plus('', '', '', '', '')">
+                                                                    </div>
+                                                                </form>
+                                                            </td>
+                                                            <td class="product-subtotal">
+                                                                <span class="amount" id="totalPrice">
+                                                                    $ --.--
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <%        }
                                                             } catch (Exception ex) {
                                                                 System.out.println(ex);
                                                             }
@@ -210,10 +224,10 @@
                                                             </td>
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="finalPrice" name="finalPrice">
-                                                                    <%for(ShoppingCartLineItem item:shoppingCart){
-                                                                        finalPrice += item.getQuantity() * item.getPrice();
-                                                                    }
-                                                                    session.setAttribute("totalPrice", finalPrice);
+                                                                    <%for (ShoppingCartLineItem item : shoppingCart) {
+                                                                            finalPrice += item.getQuantity() * item.getPrice();
+                                                                        }
+                                                                        session.setAttribute("totalPrice", finalPrice);
                                                                     %>
                                                                     <%=String.format("%.2f", finalPrice)%>
                                                                 </span>
@@ -243,8 +257,8 @@
                                                                 <label>Name on Card: </label>
                                                             </td>
                                                             <td style="padding: 5px">
-                                                                <input type="text" class="input-text text" title="name"id="txtName"
-                                                                    pattern="([a-zA-Z]*)"  required>                                                            
+                                                                <input type="text" class="input-text text" title="Please enter only letters"id="txtName"
+                                                                       pattern="([a-zA-Z]*)"  required>                                                            
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -252,8 +266,8 @@
                                                                 <label>Card Number: </label>
                                                             </td>
                                                             <td style="padding: 5px">
-                                                                <input type="text" class="input-text text " title="cardno" id="txtCardNo" 
-                                                                    pattern="((\d{4})(.*?)(\d{4})(.*?)(\d{4})(.*?)(\d{4}))|(\d{16})" required>
+                                                                <input type="text" class="input-text text " title="Enter valid Number" id="txtCardNo" 
+                                                                       pattern="((\d{4})(.*?)(\d{4})(.*?)(\d{4})(.*?)(\d{4}))|(\d{16})" required>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -261,8 +275,8 @@
                                                                 <label>CVV/CVC2: </label>
                                                             </td>
                                                             <td style="padding: 5px">
-                                                                <input type="text" class="input-text text " title="securitycode" id="txtSecuritycode" 
-                                                                    pattern="(\d{3,3})" required>
+                                                                <input type="text" class="input-text text " title="Enter Valid Number" id="txtSecuritycode" 
+                                                                       pattern="(\d{3,3})" required>
                                                             </td>
                                                         </tr>
 
@@ -285,15 +299,15 @@
                                                                     <option>November</option>
                                                                     <option>December</option>
                                                                 </select>
-                                                                <input type="text" style="width: 60px" class="input-text text" title="year" id="year" 
-                                                                    pattern="(\d{3,3})" required>(eg: 2015)                                                        
+                                                                <input type="text" style="width: 60px" class="input-text text" title="Enter valid year" id="year" 
+                                                                       pattern="(\d{3,3})" required>(eg: 2015)                                                        
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td style="">
                                                             </td>
                                                             <td style="padding-top: 20px">
-                                                                <div align="right"><a href="#makePaymentModal" data-toggle="modal"><button class="btn btn-primary">Make Payment</button></a></div>
+                                                                <div align="right"><button class="btn btn-primary" onclick="makePayment()">Make Payment</button></a></div>
                                                             </td>
                                                         </tr>
                                                         </tbody></table>
@@ -318,9 +332,9 @@
                             <p id="messageBox">The selected item(s) will be removed from your shopping cart. Are you sure you want to continue?</p>
                         </div>
                         <div class="modal-footer">
-                            <%if(shoppingCart.size() != 0){%>
+                            <%if (shoppingCart.size() != 0) {%>
                             <input class="btn btn-primary" name="btnRemove" type="submit" value="Confirm" onclick="removeItem()"/>
-                            <%}else{%>
+                            <%} else {%>
                             <input class="btn btn-primary" name="btnRemove" type="submit" value="Confirm" disabled="true"/>
                             <%}%>
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
@@ -338,9 +352,9 @@
                             <p id="messageBox">Shopping cart will not be editable after this point. Are you sure?</p>
                         </div>
                         <div class="modal-footer">
-                            <%if(shoppingCart.size() != 0){%>
+                            <%if (shoppingCart.size() != 0) {%>
                             <input class="btn btn-primary" data-dismiss ="modal" name="btnCheckout" type="button" value="Confirm" onclick="checkOut()"/>
-                            <%}else{%>
+                            <%} else {%>
                             <input class="btn btn-primary" data-dismiss ="modal" name="btnCheckout" type="button" value="Confirm" disabled="true"/>
                             <%}%>
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
