@@ -300,7 +300,7 @@
                                                                     <option>December</option>
                                                                 </select>
                                                                 <input type="text" style="width: 60px" class="input-text text" title="Enter valid year" id="year" 
-                                                                       pattern="(\d{3,3})" required>(eg: 2015)                                                        
+                                                                       pattern="(\d{4,4})" required>(eg: 2015)                                                        
                                                             </td>
                                                         </tr>
                                                         <tr>
